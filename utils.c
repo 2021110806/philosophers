@@ -18,7 +18,7 @@ void ft_sleep(t_philosopher *philo, t_philo_info *philo_info)
 	usleep(philo_info -> time_to_sleep * 1000000);
 }
 
-void think(t_philosopher *philo, t_philo_info *philo_info)
+void think(t_philosopher *philo)
 {
 	struct timeval	time;
 
@@ -26,7 +26,7 @@ void think(t_philosopher *philo, t_philo_info *philo_info)
 	ft_printf("%d %d is thinking", time.tv_sec, philo -> id);
 }
 
-void take_a_left_fork(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork)
+void take_a_left_fork(t_philosopher *philo, pthread_mutex_t *fork)
 {
 	struct timeval	time;
 
@@ -36,7 +36,7 @@ void take_a_left_fork(t_philosopher *philo, t_philo_info *philo_info, pthread_mu
 	ft_printf("%d %d is eating", time.tv_sec, philo -> id);
 }
 
-void take_a_right_fork(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork)
+void take_a_right_fork(t_philosopher *philo, pthread_mutex_t *fork)
 {
 	struct timeval	time;
 
@@ -56,7 +56,7 @@ void eat(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork)
 	philo -> number_of_eating++;
 }
 
-void die(t_philosopher *philo, t_philo_info *philo_info)
+void die(t_philosopher *philo)
 {
 	struct timeval time;
 

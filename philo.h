@@ -21,10 +21,16 @@ typedef struct s_philo_info {
 	int	number_of_times_each_philosopher_must_eat;
 }	t_philo_info;
 
+typedef struct s_data {
+	t_philosopher *philo;
+	t_philo_info *philo_info;
+	pthread_mutex_t *fork;
+}	t_data;
+
 void ft_sleep(t_philosopher *philo, t_philo_info *philo_info);
-void think(t_philosopher *philo, t_philo_info *philo_info);
-void take_a_left_fork(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork);
-void take_a_right_fork(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork);
+void think(t_philosopher *philo);
+void take_a_left_fork(t_philosopher *philo, pthread_mutex_t *fork);
+void take_a_right_fork(t_philosopher *philo, pthread_mutex_t *fork);
 void eat(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork);
-void die(t_philosopher *philo, t_philo_info *philo_info);
-#endif PHILO_H
+void die(t_philosopher *philo);
+#endif

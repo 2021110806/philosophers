@@ -21,16 +21,20 @@ int		is_all_philosophers_full(t_philosopher **philos, t_philo_info *philo_info)
 	return (1);
 }
 
-void	cycle(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork)
+void	*cycle(void *inp)
 {
-	while (!is_philosopher_full(philo, philo_info))
+	t_data *data;
+
+	data = (t_data *) inp;
+	while (!is_philosopher_full(data -> philo, data -> philo_info))
 	{
-		take_a_left_fork(philo, philo_info, fork);
-		take_a_right_fork(philo, philo_info, fork);
-		eat(philo, philo_info, fork);
-		think(philo, philo_info);
-		ft_sleep(philo, philo_info);
+		take_a_left_fork(data -> philo, data -> philo_info, data -> fork);
+		take_a_right_fork(data -> philo, data -> philo_info, data -> fork);
+		eat(data -> philo, data -> philo_info, data -> fork);
+		think(data -> philo, data -> philo_info);
+		ft_sleep(data -> philo, data -> philo_info);
 	}
+	return (0);
 }
 
  int	main(int argc, char **argv)
@@ -40,10 +44,12 @@ void	cycle(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork
 	t_philosopher	*philo;
 	pthread_mutex_t	*fork;
 	pthread_t		*threads;
+	t_data			*data;
 	int				*threadIDs;
-	void (*fptr) (t_philosopher *, t_philo_info *, pthread_mutex_t *);
+	void *(*fptr) (void *);
 	int				i;
 
+	argc  = argc + 1;
 	fptr = cycle;
 	philo_info = malloc (sizeof(t_philo_info));
 	philo_info -> number_of_philosophers = ft_atoi(argv[1]);
@@ -70,7 +76,12 @@ void	cycle(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork
 	i = 0;
 	while (i < philo_info -> number_of_philosophers)
 	{
+		data = malloc (sizeof (t_data));
+		data -> philo = philos[i];
+		data -> philo_info = philo_info;
+		data -> fork = fork;
 		pthread_create(&threads[i], 0, fptr, 0);
+		free(data);
 		i++;
 	}
 
@@ -78,6 +89,7 @@ void	cycle(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork
 	while(i < philo_info -> number_of_philosophers)
 	{
 		pthread_join(threads[i], 0);
+		i++;
 	}
 	/*
 	number of philosopher만큼 malloc
