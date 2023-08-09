@@ -28,10 +28,10 @@ void	*cycle(void *inp)
 	data = (t_data *) inp;
 	while (!is_philosopher_full(data -> philo, data -> philo_info))
 	{
-		take_a_left_fork(data -> philo, data -> philo_info, data -> fork);
-		take_a_right_fork(data -> philo, data -> philo_info, data -> fork);
+		take_a_left_fork(data -> philo, data -> fork);
+		take_a_right_fork(data -> philo, data -> fork);
 		eat(data -> philo, data -> philo_info, data -> fork);
-		think(data -> philo, data -> philo_info);
+		think(data -> philo);
 		ft_sleep(data -> philo, data -> philo_info);
 	}
 	return (0);
