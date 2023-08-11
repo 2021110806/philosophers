@@ -28,13 +28,25 @@ void	*cycle(void *inp)
 	data = (t_data *) inp;
 	while (!is_philosopher_full(data -> philo, data -> philo_info))
 	{
-		take_a_left_fork(data -> philo, data -> fork);
-		take_a_right_fork(data -> philo, data -> fork);
-		eat(data -> philo, data -> philo_info, data -> fork);
-		think(data -> philo);
-		ft_sleep(data -> philo, data -> philo_info);
+		check_if_philosopher_starve(data -> philo, data -> philo_info, data -> printf_mutex);
+		take_a_left_fork(data -> philo, data -> fork, data -> printf_mutex);
+		check_if_philosopher_starve(data -> philo, data -> philo_info, data -> printf_mutex);
+		take_a_right_fork(data -> philo, data -> fork, data -> printf_mutex);
+		check_if_philosopher_starve(data -> philo, data -> philo_info, data -> printf_mutex);
+		eat(data -> philo, data -> philo_info, data -> fork, data -> printf_mutex);
+		think(data -> philo, data -> printf_mutex);
+		ft_sleep(data -> philo, data -> philo_info, data -> printf_mutex);
 	}
 	return (0);
+}
+
+void	check_if_philosopher_starve(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *printf_mutex)
+{
+	struct timeval time;
+
+	gettimeofday(&time, 0);
+	if ((int) (time.tv_usec * 0.001 + time.tv_sec * 1000) - philo -> last_eating > philo_info ->number_of_times_each_philosopher_must_eat)
+		die(philo, printf_mutex);
 }
 
  int	main(int argc, char **argv)
@@ -43,6 +55,7 @@ void	*cycle(void *inp)
 	t_philo_info	*philo_info;
 	t_philosopher	*philo;
 	pthread_mutex_t	*fork;
+	pthread_mutex_t	printf_mutex;
 	pthread_t		*threads;
 	t_data			*data;
 	int				*threadIDs;
@@ -61,17 +74,18 @@ void	*cycle(void *inp)
 	fork = malloc (sizeof (pthread_mutex_t *) * philo_info -> number_of_philosophers);
 	threads = malloc (sizeof (pthread_t *) * philo_info -> number_of_philosophers);
 	threadIDs = malloc (sizeof (int *) * philo_info -> number_of_philosophers);
+	pthread_mutex_init(&printf_mutex, 0);
 	i = 0;
 	while (i < philo_info -> number_of_philosophers)
 	{
 		philo = malloc (sizeof(t_philosopher));
 		philo -> id = i;
 		philo -> left_fork = i;
-		philo -> right_fork = (philo_info -> number_of_philosophers - 1) - 1;
+		philo -> right_fork = (philo_info -> number_of_philosophers) - 1 - i;
 		philo -> number_of_eating = 0;
 		philos[i] = philo;
 		pthread_mutex_init(&fork[i], 0);
-		free(philo);
+		i++;
 	}
 	i = 0;
 	while (i < philo_info -> number_of_philosophers)
@@ -80,8 +94,9 @@ void	*cycle(void *inp)
 		data -> philo = philos[i];
 		data -> philo_info = philo_info;
 		data -> fork = fork;
-		pthread_create(&threads[i], 0, fptr, 0);
-		free(data);
+		data -> printf_mutex = &printf_mutex;
+		data -> philo -> last_eating = 0;
+		pthread_create(&threads[i], 0, fptr, data);
 		i++;
 	}
 
@@ -105,6 +120,12 @@ void	*cycle(void *inp)
 	philo 생성, fork개수만큼 mutex 생성
 	각 철학자에 적용시킬 사이클 함수 생성 (먹고 자고 생각하고)
 	레프트 포크 집어들면 오른쪽 포크 집어뜰들때까지 대기
+
+	스레드의 대기 시간을 추적하는 변수를 사용합니다.
+해당 스레드에서 뮤텍스를 잠금(lock)하기 전에 시간을 기록합니다.
+뮤텍스 잠금에 성공하면, 대기 시간을 다시 계산하여 현재 시간과의 차이를 계산합니다.
+만약 대기 시간이 설정한 임계값을 초과하면 원하는 메시지를 출력합니다.
+뮤텍스를 잠금 해제(unlock)하기 전에 대기 시간 추적 변수를 초기화합니다.
 
 	
 	*/

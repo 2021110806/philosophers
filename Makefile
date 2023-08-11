@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g3 -fsanitize=address
 NAME = philo
 LIBFT = ./libft/libft.a
 LIBFT_DIR = libft

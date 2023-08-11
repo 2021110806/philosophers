@@ -11,6 +11,7 @@ typedef struct s_philosopher {
 	int	left_fork;
 	int	right_fork;
 	int	number_of_eating;
+	int	last_eating;
 }	t_philosopher;
 
 typedef struct s_philo_info {
@@ -25,12 +26,14 @@ typedef struct s_data {
 	t_philosopher *philo;
 	t_philo_info *philo_info;
 	pthread_mutex_t *fork;
+	pthread_mutex_t *printf_mutex;
 }	t_data;
 
-void ft_sleep(t_philosopher *philo, t_philo_info *philo_info);
-void think(t_philosopher *philo);
-void take_a_left_fork(t_philosopher *philo, pthread_mutex_t *fork);
-void take_a_right_fork(t_philosopher *philo, pthread_mutex_t *fork);
-void eat(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork);
-void die(t_philosopher *philo);
+void	ft_sleep(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *printf_mutex);
+void	think(t_philosopher *philo, pthread_mutex_t *printf_mutex);
+void	take_a_left_fork(t_philosopher *philo, pthread_mutex_t *fork, pthread_mutex_t *printf_mutex);
+void	take_a_right_fork(t_philosopher *philo, pthread_mutex_t *fork, pthread_mutex_t *printf_mutex);
+void	eat(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork, pthread_mutex_t *printf_mutex);
+void	die(t_philosopher *philo, pthread_mutex_t *printf_mutex);
+void	check_if_philosopher_starve(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *printf_mutex);
 #endif
