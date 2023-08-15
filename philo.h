@@ -13,6 +13,7 @@ typedef struct s_philosopher {
 	int		right_fork;
 	int		number_of_eating;
 	long long	last_eating;
+	long long	birth_time;
 }	t_philosopher;
 
 typedef struct s_philo_info {

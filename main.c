@@ -47,8 +47,8 @@ void	check_if_philosopher_starve(t_philosopher *philo, t_philo_info *philo_info,
 	curr_time = get_time_in_milliseconds(time);
 	if (curr_time - philo -> last_eating >= philo_info -> time_to_die)
 		die(philo, printf_mutex);
-	printf("curr : %lld, last eat : %lld, can wait : %lld\n", curr_time,philo -> last_eating, (long long) philo_info -> time_to_die);
-	printf("difference : %lld\n", curr_time - philo -> last_eating);
+	// printf("curr : %lld, last eat : %lld, can wait : %lld\n", curr_time,philo -> last_eating, (long long) philo_info -> time_to_die);
+	// printf("difference : %lld\n", curr_time - philo -> last_eating);
 }
 
 void	*monitoring_if_there_is_starve_philosopher(void *inp)
@@ -122,6 +122,7 @@ void	*monitoring_if_there_is_starve_philosopher(void *inp)
 		data -> fork = fork;
 		data -> printf_mutex = &printf_mutex;
 		gettimeofday(time, 0);
+		data -> philo -> birth_time = get_time_in_milliseconds(time);
 		data -> philo -> last_eating = get_time_in_milliseconds(time);
 		pthread_create(&threads[i], 0, cycle_ptr, data);
 		i++;

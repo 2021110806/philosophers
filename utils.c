@@ -16,7 +16,7 @@ void	ft_sleep(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *p
 	time = malloc(sizeof(struct timeval));
 	gettimeofday(time, 0);
 	pthread_mutex_lock(printf_mutex);
-	printf("%lld %d is sleeping\n", get_time_in_milliseconds(time), philo -> id);
+	printf("%lld %d is sleeping\n",  get_time_in_milliseconds(time) - philo -> birth_time, philo -> id);
 	usleep(philo_info -> time_to_sleep * 1000);
 	pthread_mutex_unlock(printf_mutex);
 }
@@ -28,7 +28,7 @@ void	think(t_philosopher *philo, pthread_mutex_t *printf_mutex)
 	time = malloc(sizeof(struct timeval));
 	gettimeofday(time, 0);
 	pthread_mutex_lock(printf_mutex);
-	printf("%lld %d is thinking\n", get_time_in_milliseconds(time), philo -> id);
+	printf("%lld %d is thinking\n", get_time_in_milliseconds(time) - philo -> birth_time, philo -> id);
 	pthread_mutex_unlock(printf_mutex);
 }
 
@@ -40,8 +40,8 @@ void	take_a_left_fork(t_philosopher *philo, pthread_mutex_t *fork, pthread_mutex
 	gettimeofday(time, 0);
 	pthread_mutex_lock(&fork[philo -> left_fork]);
 	pthread_mutex_lock(printf_mutex);
-	printf("%lld %d is taken a left fork\n",get_time_in_milliseconds(time), philo -> id);
-	
+	printf("%lld %d is taken a left fork\n",get_time_in_milliseconds(time) - philo -> birth_time, philo -> id);
+
 	pthread_mutex_unlock(printf_mutex);
 }
 
@@ -53,7 +53,7 @@ void	take_a_right_fork(t_philosopher *philo, pthread_mutex_t *fork, pthread_mute
 	gettimeofday(time, 0);
 	pthread_mutex_lock(&fork[philo -> right_fork]);
 	pthread_mutex_lock(printf_mutex);
-	printf("%lld %d is taken a right fork\n", get_time_in_milliseconds(time), philo -> id);
+	printf("%lld %d is taken a right fork\n", get_time_in_milliseconds(time) - philo -> birth_time, philo -> id);
 	pthread_mutex_unlock(printf_mutex);
 }
 
@@ -65,7 +65,7 @@ void	eat(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork, 
 	time = malloc(sizeof(struct timeval));
 	gettimeofday(time, 0);
 	philo -> last_eating =  get_time_in_milliseconds(time);
-	printf("%lld %d is eating\n", philo -> last_eating, philo -> id);
+	printf("%lld %d is eating\n",  get_time_in_milliseconds(time) - philo -> birth_time, philo -> id);
 	pthread_mutex_unlock(printf_mutex);
 	usleep(philo_info -> time_to_eat * 1000);
 	pthread_mutex_unlock(&fork[philo -> left_fork]);
@@ -79,7 +79,7 @@ void	die(t_philosopher *philo, pthread_mutex_t *printf_mutex)
 
 	time = malloc(sizeof(struct timeval));
 	gettimeofday(time, 0);
-	printf("%lld %d is dead\n", get_time_in_milliseconds(time), philo -> id);
+	printf("%lld %d is dead\n",  get_time_in_milliseconds(time) - philo -> birth_time, philo -> id);
 	exit(0);
 }
 
