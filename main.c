@@ -28,11 +28,8 @@ void	*cycle(void *inp)
 	data = (t_data *) inp;
 	while (!is_philosopher_full(data -> philo, data -> philo_info))
 	{
-		check_if_philosopher_starve(data -> philo, data -> philo_info, data -> printf_mutex);
 		take_a_left_fork(data -> philo, data -> fork, data -> printf_mutex);
-		check_if_philosopher_starve(data -> philo, data -> philo_info, data -> printf_mutex);
 		take_a_right_fork(data -> philo, data -> fork, data -> printf_mutex);
-		check_if_philosopher_starve(data -> philo, data -> philo_info, data -> printf_mutex);
 		eat(data -> philo, data -> philo_info, data -> fork, data -> printf_mutex);
 		ft_sleep(data -> philo, data -> philo_info, data -> printf_mutex);
 		think(data -> philo, data -> printf_mutex);
@@ -54,6 +51,22 @@ void	check_if_philosopher_starve(t_philosopher *philo, t_philo_info *philo_info,
 	printf("difference : %lld\n", curr_time - philo -> last_eating);
 }
 
+void	*monitoring_if_there_is_starve_philosopher(void *inp)
+{
+	int					i;
+	t_data				*data;
+
+	i = 0;
+	data = (t_data *) inp;
+	while (1)
+	{
+		if (i >= data -> philo_info -> number_of_philosophers)
+			i = 0;
+		check_if_philosopher_starve(data -> philos[i], data -> philo_info, data -> printf_mutex);
+		i++;
+	}
+}
+
  int	main(int argc, char **argv)
  {
 	t_philosopher	**philos;
@@ -62,13 +75,16 @@ void	check_if_philosopher_starve(t_philosopher *philo, t_philo_info *philo_info,
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	printf_mutex;
 	pthread_t		*threads;
+	pthread_t		*monitoring;
 	t_data			*data;
 	int				*threadIDs;
 	struct timeval *time;
-	void *(*fptr) (void *);
-	int				i;
+	void *(*cycle_ptr) (void *);
+	void *(*monitor_ptr) (void *);
+	int					i;
 
-	fptr = cycle;
+	cycle_ptr = cycle;
+	monitor_ptr = monitoring_if_there_is_starve_philosopher;
 	time = malloc(sizeof(struct timeval));
 	philo_info = malloc (sizeof(t_philo_info));
 	philo_info -> number_of_philosophers = ft_atoi(argv[1]);
@@ -82,6 +98,7 @@ void	check_if_philosopher_starve(t_philosopher *philo, t_philo_info *philo_info,
 	philos = malloc (sizeof (t_philosopher *) * philo_info -> number_of_philosophers);
 	fork = malloc (sizeof (pthread_mutex_t) * philo_info -> number_of_philosophers);
 	threads = malloc (sizeof (pthread_t *) * philo_info -> number_of_philosophers);
+	monitoring = malloc (sizeof (pthread_t *));
 	threadIDs = malloc (sizeof (int *) * philo_info -> number_of_philosophers);
 	pthread_mutex_init(&printf_mutex, 0);
 	i = 0;
@@ -106,10 +123,11 @@ void	check_if_philosopher_starve(t_philosopher *philo, t_philo_info *philo_info,
 		data -> printf_mutex = &printf_mutex;
 		gettimeofday(time, 0);
 		data -> philo -> last_eating = get_time_in_milliseconds(time);
-		pthread_create(&threads[i], 0, fptr, data);
+		pthread_create(&threads[i], 0, cycle_ptr, data);
 		i++;
 	}
-
+	data -> philos = philos;
+	pthread_create(monitoring, 0, monitor_ptr, data);
 	i = 0;
 	while(i < philo_info -> number_of_philosophers)
 	{

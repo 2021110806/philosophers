@@ -25,6 +25,7 @@ typedef struct s_philo_info {
 
 typedef struct s_data {
 	t_philosopher *philo;
+	t_philosopher	**philos;
 	t_philo_info *philo_info;
 	pthread_mutex_t *fork;
 	pthread_mutex_t *printf_mutex;
