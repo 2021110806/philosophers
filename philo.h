@@ -4,14 +4,15 @@
 # include <stdlib.h>
 # include <pthread.h>
 # include <sys/time.h>
+# include <stdio.h>
 # include "./libft/libft.h"
 
 typedef struct s_philosopher {
-	int	id;
-	int	left_fork;
-	int	right_fork;
-	int	number_of_eating;
-	int	last_eating;
+	int		id;
+	int		left_fork;
+	int		right_fork;
+	int		number_of_eating;
+	long long	last_eating;
 }	t_philosopher;
 
 typedef struct s_philo_info {
@@ -29,11 +30,12 @@ typedef struct s_data {
 	pthread_mutex_t *printf_mutex;
 }	t_data;
 
-void	ft_sleep(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *printf_mutex);
-void	think(t_philosopher *philo, pthread_mutex_t *printf_mutex);
-void	take_a_left_fork(t_philosopher *philo, pthread_mutex_t *fork, pthread_mutex_t *printf_mutex);
-void	take_a_right_fork(t_philosopher *philo, pthread_mutex_t *fork, pthread_mutex_t *printf_mutex);
-void	eat(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork, pthread_mutex_t *printf_mutex);
-void	die(t_philosopher *philo, pthread_mutex_t *printf_mutex);
-void	check_if_philosopher_starve(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *printf_mutex);
+void		ft_sleep(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *printf_mutex);
+void		think(t_philosopher *philo, pthread_mutex_t *printf_mutex);
+void		take_a_left_fork(t_philosopher *philo, pthread_mutex_t *fork, pthread_mutex_t *printf_mutex);
+void		take_a_right_fork(t_philosopher *philo, pthread_mutex_t *fork, pthread_mutex_t *printf_mutex);
+void		eat(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork, pthread_mutex_t *printf_mutex);
+void		die(t_philosopher *philo, pthread_mutex_t *printf_mutex);
+void		check_if_philosopher_starve(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *printf_mutex);
+long long	get_time_in_milliseconds(struct timeval *time);
 #endif
