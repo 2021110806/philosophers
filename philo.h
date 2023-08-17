@@ -41,4 +41,5 @@ void		eat(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork,
 void		die(t_philosopher *philo, pthread_mutex_t *printf_mutex);
 void		check_if_philosopher_starve(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *printf_mutex);
 long long	get_time_in_milliseconds(struct timeval *time);
+void		wait_for_sleeping_or_eating(t_philo_info *philo_info, t_philosopher *philo, struct timeval *start_time, int is_sleep);
 #endif

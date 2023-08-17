@@ -32,10 +32,20 @@ void	*cycle(void *inp)
 		{
 			if (!(data -> philo_info -> fork_lock[data -> philo -> left_fork]) && (!(data -> philo_info -> fork_lock[data -> philo -> right_fork])))
 				{
-					data -> philo_info -> fork_lock[data -> philo -> left_fork] = 1;
-					data -> philo_info -> fork_lock[data -> philo -> right_fork] = 1;
-					take_a_left_fork(data -> philo, data -> fork, data -> philo_info, data -> printf_mutex);
-					take_a_right_fork(data -> philo, data -> fork,  data -> philo_info, data -> printf_mutex);
+					if (data -> philo -> id % 2 == 1)
+					{
+						data -> philo_info -> fork_lock[data -> philo -> left_fork] = 1;
+						data -> philo_info -> fork_lock[data -> philo -> right_fork] = 1;
+						take_a_left_fork(data -> philo, data -> fork, data -> philo_info, data -> printf_mutex);
+						take_a_right_fork(data -> philo, data -> fork,  data -> philo_info, data -> printf_mutex);
+					}
+					else
+					{
+						data -> philo_info -> fork_lock[data -> philo -> right_fork] = 1;
+						data -> philo_info -> fork_lock[data -> philo -> left_fork] = 1;
+						take_a_right_fork(data -> philo, data -> fork, data -> philo_info, data -> printf_mutex);
+						take_a_left_fork(data -> philo, data -> fork,  data -> philo_info, data -> printf_mutex);
+					}
 					eat(data -> philo, data -> philo_info, data -> fork, data -> printf_mutex);
 					data -> philo_info -> fork_lock[data -> philo -> left_fork] = 0;
 					data -> philo_info -> fork_lock[data -> philo -> right_fork] = 0;
@@ -117,9 +127,9 @@ void	*monitoring_if_there_is_starve_philosopher(void *inp)
 	while (i < philo_info -> number_of_philosophers)
 	{
 		philo = malloc (sizeof(t_philosopher));
-		philo -> id = i;
+		philo -> id = i + 1;
 		philo -> left_fork = i;
-		philo -> right_fork = philo_info -> number_of_philosophers - i - 1;
+		philo -> right_fork = (philo_info -> number_of_philosophers - 1 != i) * (i + 1);
 		philo_info -> fork_lock[i] = 0;
 		philo -> number_of_eating = 0;
 		philos[i] = philo;

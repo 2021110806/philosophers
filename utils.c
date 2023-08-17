@@ -1,14 +1,5 @@
 #include "philo.h"
 
-// void eat(t_philosopher *philo, t_philo_info *philo_info)
-// {
-// 	struct timeval time;
-
-// 	gettimeofday(&time, 0);
-// 	ft_printf("%d %d is eating", time.tv_sec, philo -> id);
-// 	usleep(philo_info -> time_to_eat * 1000000);
-// }
-
 void	ft_sleep(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *printf_mutex)
 {
 	struct timeval	*time;
@@ -20,7 +11,8 @@ void	ft_sleep(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *p
 	pthread_mutex_lock(printf_mutex);
 	printf("%lld %d is sleeping\n",  get_time_in_milliseconds(time) - philo -> birth_time, philo -> id);
 	pthread_mutex_unlock(printf_mutex);
-	usleep(1000 * philo_info -> time_to_sleep);
+	wait_for_sleeping_or_eating(philo_info,  philo, time, 1);
+	usleep(200);
 }
 
 void	think(t_philosopher *philo, pthread_mutex_t *printf_mutex)
@@ -71,7 +63,7 @@ void	eat(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork, 
 	pthread_mutex_lock(printf_mutex);
 	printf("%lld %d is eating\n",  get_time_in_milliseconds(time) - philo -> birth_time, philo -> id);
 	pthread_mutex_unlock(printf_mutex);
-	usleep(1000 * philo_info -> time_to_eat);
+	wait_for_sleeping_or_eating(philo_info, philo, time, 0);
 	pthread_mutex_unlock(&fork[philo -> left_fork]);
 	pthread_mutex_unlock(&fork[philo -> right_fork]);
 	philo -> number_of_eating++;
@@ -90,4 +82,20 @@ void	die(t_philosopher *philo, pthread_mutex_t *printf_mutex)
 long long	get_time_in_milliseconds(struct timeval *time)
 {
 	return (long long)(time->tv_sec * 1000) + (time->tv_usec / 1000);
+}
+
+void	wait_for_sleeping_or_eating(t_philo_info *philo_info, t_philosopher *philo, struct timeval *start_time, int is_sleep)
+{
+	struct timeval	*time;
+
+	time = malloc(sizeof(struct timeval));
+	while (1)
+	{
+		gettimeofday(time, 0);
+		if (get_time_in_milliseconds(time) - get_time_in_milliseconds(start_time) >= philo_info -> time_to_sleep && is_sleep)
+			break ;
+		if (get_time_in_milliseconds(time) - get_time_in_milliseconds(start_time) >= philo_info -> time_to_eat && !is_sleep)
+			break ;
+		usleep(5);
+	}
 }
