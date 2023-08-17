@@ -22,6 +22,7 @@ typedef struct s_philo_info {
 	int	time_to_eat;
 	int	time_to_sleep;
 	int	number_of_times_each_philosopher_must_eat;
+	int	*fork_lock;
 }	t_philo_info;
 
 typedef struct s_data {
@@ -34,8 +35,8 @@ typedef struct s_data {
 
 void		ft_sleep(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *printf_mutex);
 void		think(t_philosopher *philo, pthread_mutex_t *printf_mutex);
-void		take_a_left_fork(t_philosopher *philo, pthread_mutex_t *fork, pthread_mutex_t *printf_mutex);
-void		take_a_right_fork(t_philosopher *philo, pthread_mutex_t *fork, pthread_mutex_t *printf_mutex);
+void	take_a_left_fork(t_philosopher *philo, pthread_mutex_t *fork, t_philo_info *philo_info, pthread_mutex_t *printf_mutex);
+void	take_a_right_fork(t_philosopher *philo, pthread_mutex_t *fork, t_philo_info *philo_info, pthread_mutex_t *printf_mutex);
 void		eat(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *fork, pthread_mutex_t *printf_mutex);
 void		die(t_philosopher *philo, pthread_mutex_t *printf_mutex);
 void		check_if_philosopher_starve(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *printf_mutex);

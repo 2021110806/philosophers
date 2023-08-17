@@ -28,9 +28,20 @@ void	*cycle(void *inp)
 	data = (t_data *) inp;
 	while (!is_philosopher_full(data -> philo, data -> philo_info))
 	{
-		take_a_left_fork(data -> philo, data -> fork, data -> printf_mutex);
-		take_a_right_fork(data -> philo, data -> fork, data -> printf_mutex);
-		eat(data -> philo, data -> philo_info, data -> fork, data -> printf_mutex);
+		while (1)
+		{
+			if (!(data -> philo_info -> fork_lock[data -> philo -> left_fork]) && (!(data -> philo_info -> fork_lock[data -> philo -> right_fork])))
+				{
+					data -> philo_info -> fork_lock[data -> philo -> left_fork] = 1;
+					data -> philo_info -> fork_lock[data -> philo -> right_fork] = 1;
+					take_a_left_fork(data -> philo, data -> fork, data -> philo_info, data -> printf_mutex);
+					take_a_right_fork(data -> philo, data -> fork,  data -> philo_info, data -> printf_mutex);
+					eat(data -> philo, data -> philo_info, data -> fork, data -> printf_mutex);
+					data -> philo_info -> fork_lock[data -> philo -> left_fork] = 0;
+					data -> philo_info -> fork_lock[data -> philo -> right_fork] = 0;
+					break;
+				}
+		}
 		ft_sleep(data -> philo, data -> philo_info, data -> printf_mutex);
 		think(data -> philo, data -> printf_mutex);
 	}
@@ -91,15 +102,16 @@ void	*monitoring_if_there_is_starve_philosopher(void *inp)
 	philo_info -> time_to_die = ft_atoi(argv[2]);
 	philo_info -> time_to_eat = ft_atoi(argv[3]);
 	philo_info -> time_to_sleep = ft_atoi(argv[4]);
-	if (argc == 5)
+	if (argc == 6)
 		philo_info -> number_of_times_each_philosopher_must_eat = (int) ft_atoi(argv[5]);
 	else
 		philo_info -> number_of_times_each_philosopher_must_eat = 2147483647;
 	philos = malloc (sizeof (t_philosopher *) * philo_info -> number_of_philosophers);
 	fork = malloc (sizeof (pthread_mutex_t) * philo_info -> number_of_philosophers);
-	threads = malloc (sizeof (pthread_t *) * philo_info -> number_of_philosophers);
+	threads = malloc (sizeof (pthread_t) * philo_info -> number_of_philosophers);
 	monitoring = malloc (sizeof (pthread_t *));
-	threadIDs = malloc (sizeof (int *) * philo_info -> number_of_philosophers);
+	threadIDs = malloc (sizeof (int) * philo_info -> number_of_philosophers);
+	philo_info -> fork_lock = malloc (sizeof(int) * philo_info -> number_of_philosophers);
 	pthread_mutex_init(&printf_mutex, 0);
 	i = 0;
 	while (i < philo_info -> number_of_philosophers)
@@ -107,9 +119,11 @@ void	*monitoring_if_there_is_starve_philosopher(void *inp)
 		philo = malloc (sizeof(t_philosopher));
 		philo -> id = i;
 		philo -> left_fork = i;
-		philo -> right_fork = (philo_info -> number_of_philosophers) - 1 - i;
+		philo -> right_fork = philo_info -> number_of_philosophers - i - 1;
+		philo_info -> fork_lock[i] = 0;
 		philo -> number_of_eating = 0;
 		philos[i] = philo;
+		usleep(100);
 		pthread_mutex_init(&fork[i], 0);
 		i++;
 	}
@@ -119,7 +133,7 @@ void	*monitoring_if_there_is_starve_philosopher(void *inp)
 		data = malloc (sizeof (t_data));
 		data -> philo = philos[i];
 		data -> philo_info = philo_info;
-		data -> fork = fork;
+		data -> fork = fork;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 		data -> printf_mutex = &printf_mutex;
 		gettimeofday(time, 0);
 		data -> philo -> birth_time = get_time_in_milliseconds(time);
