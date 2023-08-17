@@ -1,9 +1,21 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: minjeon2 <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/08/17 20:52:41 by minjeon2          #+#    #+#              #
+#    Updated: 2023/08/17 20:52:43 by minjeon2         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 CC = cc
-CFLAGS = -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 NAME = philo
 LIBFT = ./libft/libft.a
 LIBFT_DIR = libft
-SRCS = main.c utils.c
+SRCS = main.c utils.c acting.c philo_monitor.c list_maker.c
 OBJS = $(SRCS:.c=.o)
 
 .PHONY : clean fclean re all bonus
