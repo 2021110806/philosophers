@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:37:48 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/08/18 16:31:59 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/08/18 16:54:06 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ int	main(int argc, char **argv)
 	pthread_mutex_t	eating_mutex;
 	pthread_mutex_t	fork_mutex;
 
+	if (!(argc == 5 || argc == 6))
+		exit (1);
 	philo_info = parse_argv(argc, argv);
 	philo_info -> fork_mutex = &fork_mutex;
 	philo_info -> eating_mutex = &eating_mutex;
