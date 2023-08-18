@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:37:48 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/08/18 18:36:15 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/08/18 18:41:39 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	*cycle(void *inp)
 		ft_sleep(data -> philo, data -> philo_info, data -> printf_mutex);
 		think(data -> philo, data -> printf_mutex);
 	}
+	free(data);
 	return (0);
 }
 
@@ -95,7 +96,6 @@ t_philosopher **philos, pthread_mutex_t *fork)
 		data -> philo -> birth_time = get_time_in_milliseconds(&time);
 		data -> philo -> last_eating = get_time_in_milliseconds(&time);
 		pthread_create(&threads[i], 0, cycle, data);
-		free(data);
 		i++;
 	}
 	data -> philos = philos;
