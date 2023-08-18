@@ -6,12 +6,12 @@
 #    By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/17 20:52:41 by minjeon2          #+#    #+#              #
-#    Updated: 2023/08/18 18:00:23 by minjeon2         ###   ########.fr        #
+#    Updated: 2023/08/18 20:10:12 by minjeon2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror
 NAME = philo
 SRCS = main.c utils.c acting.c philo_monitor.c list_maker.c memory_manager.c
 OBJS = $(SRCS:.c=.o)

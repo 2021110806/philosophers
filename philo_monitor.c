@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:19:14 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/08/18 18:39:41 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/08/18 20:10:00 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ t_philo_info *philo_info, pthread_mutex_t *printf_mutex)
 	if (curr_time - philo -> last_eating >= philo_info -> time_to_die)
 	{
 		die(philo, printf_mutex);
-		die(philo, printf_mutex);
-		die(philo, printf_mutex);
 		pthread_mutex_unlock((philo_info -> eating_mutex));
 		return (1);
 	}
@@ -85,6 +83,7 @@ void	start_monitoring_thread(t_data *data, pthread_t *threads)
 	while (i < data -> philo_info -> number_of_philosophers)
 	{
 		pthread_join(threads[i], 0);
+		pthread_join(*monitoring, 0);
 		i++;
 	}
 	free(monitoring);
