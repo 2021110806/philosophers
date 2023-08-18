@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:10:41 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/08/18 16:53:59 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/08/18 18:36:29 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,14 @@
 
 void	die(t_philosopher *philo, pthread_mutex_t *printf_mutex)
 {
-	struct timeval	*time;
+	struct timeval	time;
 
-	time = malloc(sizeof(struct timeval));
-	gettimeofday(time, 0);
+	gettimeofday(&time, 0);
 	pthread_mutex_lock(printf_mutex);
-	printf("%lld %d is dead\n", get_time_in_milliseconds(time) - \
+	printf("%lld %d is dead\n", get_time_in_milliseconds(&time) - \
 	philo -> birth_time, philo -> id);
 	pthread_mutex_unlock(printf_mutex);
-	exit(0);
+	return ;
 }
 
 long long	get_time_in_milliseconds(struct timeval *time)
@@ -33,17 +32,16 @@ long long	get_time_in_milliseconds(struct timeval *time)
 void	wait_for_sleeping_or_eating(t_philo_info *philo_info, \
 struct timeval *start_time, int is_sleep)
 {
-	struct timeval	*time;
+	struct timeval	time;
 
-	time = malloc(sizeof(struct timeval));
 	while (1)
 	{
-		gettimeofday(time, 0);
-		if (get_time_in_milliseconds(time) - \
+		gettimeofday(&time, 0);
+		if (get_time_in_milliseconds(&time) - \
 		get_time_in_milliseconds(start_time) >= \
 		philo_info -> time_to_sleep && is_sleep)
 			break ;
-		if (get_time_in_milliseconds(time) - \
+		if (get_time_in_milliseconds(&time) - \
 		get_time_in_milliseconds(start_time) >= \
 		philo_info -> time_to_eat && !is_sleep)
 			break ;
@@ -65,13 +63,16 @@ t_philo_info	*parse_argv(int argc, char **argv)
 		number_of_times_each_philosopher_must_eat = (int) ft_atoi(argv[5]);
 	else
 		philo_info -> number_of_times_each_philosopher_must_eat = 2147483647;
-	philo_info -> fork_lock = \
-	malloc (sizeof(int) * philo_info -> number_of_philosophers);
 	if (!philo_info -> time_to_die || !philo_info -> time_to_eat \
 	|| !philo_info -> time_to_sleep || \
 	!philo_info -> number_of_philosophers || \
 	!philo_info ->number_of_times_each_philosopher_must_eat)
-		exit (1);
+	{
+		free(philo_info);
+		return (0);
+	}
+	philo_info -> fork_lock = \
+	malloc (sizeof(int) * philo_info -> number_of_philosophers);
 	return (philo_info);
 }
 

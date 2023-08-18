@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:52:24 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/08/18 16:34:32 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/08/18 17:57:53 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ pthread_mutex_t *printf_mutex);
 void			eat(t_philosopher *philo, t_philo_info *philo_info, \
 pthread_mutex_t *fork, pthread_mutex_t *printf_mutex);
 void			die(t_philosopher *philo, pthread_mutex_t *printf_mutex);
-void			check_if_philosopher_starve(t_philosopher *philo, \
+int				check_if_philosopher_starve(t_philosopher *philo, \
 t_philo_info *philo_info, pthread_mutex_t *printf_mutex);
 long long		get_time_in_milliseconds(struct timeval *time);
 void			wait_for_sleeping_or_eating(t_philo_info *philo_info, \
@@ -74,4 +74,6 @@ t_philosopher	**make_philos_list(t_philo_info *philo_info);
 pthread_mutex_t	*make_forks(t_philo_info *philo_info);
 void			lock_or_unlock_forklock(t_data *data, int will_lock);
 int				ft_atoi(const char *str);
+void			free_ptr(t_philosopher **philos, \
+t_philo_info *philo_info);
 #endif
