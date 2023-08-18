@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:19:14 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/08/18 20:10:00 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/08/18 20:12:21 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_philo_info *philo_info, pthread_mutex_t *printf_mutex)
 	if (curr_time - philo -> last_eating >= philo_info -> time_to_die)
 	{
 		die(philo, printf_mutex);
+		philo_info -> died_philo = 1;
 		pthread_mutex_unlock((philo_info -> eating_mutex));
 		return (1);
 	}

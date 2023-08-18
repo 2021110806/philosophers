@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:37:48 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/08/18 18:41:39 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/08/18 20:13:00 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	*cycle(void *inp)
 	{
 		if (is_philosopher_full(data -> philo, data -> philo_info))
 			return (0);
+		if (data -> philo_info -> died_philo)
+			return (0);
 		take_fork(data);
 		ft_sleep(data -> philo, data -> philo_info, data -> printf_mutex);
 		think(data -> philo, data -> printf_mutex);
@@ -119,6 +121,7 @@ int	main(int argc, char **argv)
 	}
 	philo_info -> fork_mutex = &fork_mutex;
 	philo_info -> eating_mutex = &eating_mutex;
+	philo_info -> died_philo = 0;
 	pthread_mutex_init((philo_info -> fork_mutex), 0);
 	pthread_mutex_init((philo_info -> eating_mutex), 0);
 	philos = make_philos_list(philo_info);

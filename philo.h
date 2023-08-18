@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:52:24 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/08/18 17:57:53 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/08/18 20:11:17 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_philo_info {
 	int				time_to_sleep;
 	int				number_of_times_each_philosopher_must_eat;
 	int				*fork_lock;
+	int				died_philo;
 	pthread_mutex_t	*fork_mutex;
 	pthread_mutex_t	*eating_mutex;
 }	t_philo_info;
