@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:06:16 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/08/17 20:54:39 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/08/18 16:32:18 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ pthread_mutex_t *printf_mutex)
 	gettimeofday(time, 0);
 	pthread_mutex_lock(&fork[philo -> left_fork]);
 	pthread_mutex_lock(printf_mutex);
-	printf("%lld %d is taken a left forkd\n", get_time_in_milliseconds(time) - \
+	printf("%lld %d is taken a left fork\n", get_time_in_milliseconds(time) - \
 	philo -> birth_time, philo -> id);
 	pthread_mutex_unlock(printf_mutex);
 }
@@ -79,7 +79,9 @@ pthread_mutex_t *fork, pthread_mutex_t *printf_mutex)
 	i = 0;
 	time = malloc(sizeof(struct timeval));
 	gettimeofday(time, 0);
+	pthread_mutex_lock((philo_info -> eating_mutex));
 	philo -> last_eating = get_time_in_milliseconds(time);
+	pthread_mutex_unlock((philo_info -> eating_mutex));
 	pthread_mutex_lock(printf_mutex);
 	printf("%lld %d is eating\n", get_time_in_milliseconds(time) - \
 	philo -> birth_time, philo -> id);

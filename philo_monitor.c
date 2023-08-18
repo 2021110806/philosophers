@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:19:14 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/08/17 20:46:44 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/08/18 15:18:23 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,10 @@ t_philo_info *philo_info, pthread_mutex_t *printf_mutex)
 	time = malloc(sizeof(struct timeval));
 	gettimeofday(time, 0);
 	curr_time = get_time_in_milliseconds(time);
+	pthread_mutex_lock((philo_info -> eating_mutex));
 	if (curr_time - philo -> last_eating >= philo_info -> time_to_die)
 		die(philo, printf_mutex);
+	pthread_mutex_unlock((philo_info -> eating_mutex));
 }
 
 void	*monitoring_if_there_is_starve_philosopher(void *inp)

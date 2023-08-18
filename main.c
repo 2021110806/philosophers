@@ -6,38 +6,53 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:37:48 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/08/17 20:53:13 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/08/18 16:31:59 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void	lock_or_unlock_forklock(t_data *data, int will_lock)
+{
+	pthread_mutex_lock(data -> philo_info -> fork_mutex);
+	if (will_lock)
+	{
+		data -> philo_info -> fork_lock[data -> philo -> left_fork] = 1;
+		data -> philo_info -> fork_lock[data -> philo ->right_fork] = 1;
+	}
+	else
+	{
+		data -> philo_info -> fork_lock[data -> philo -> left_fork] = 0;
+		data -> philo_info -> fork_lock[data -> philo -> right_fork] = 0;
+	}
+	pthread_mutex_unlock(data -> philo_info -> fork_mutex);
+	return ;
+}
+
 void	take_fork(t_data *data)
 {
 	while (1)
 	{
+		pthread_mutex_lock(data -> philo_info -> fork_mutex);
 		if (!(data -> philo_info -> fork_lock[data -> philo -> left_fork]) \
 		&& (!(data -> philo_info -> fork_lock[data -> philo -> right_fork])))
 		{
+			pthread_mutex_unlock(data -> philo_info -> fork_mutex);
 			if (data -> philo -> id % 2 == 1)
 			{
-				data -> philo_info -> fork_lock[data -> philo -> left_fork] = 1;
-				data -> philo_info -> fork_lock[data -> philo ->right_fork] = 1;
 				take_a_left_fork(data -> philo, data->fork, data->printf_mutex);
 				take_a_right_fork(data->philo, data->fork, data->printf_mutex);
 			}
 			else
 			{
-				data -> philo_info -> fork_lock[data->philo -> right_fork] = 1;
-				data -> philo_info -> fork_lock[data -> philo -> left_fork] = 1;
 				take_a_right_fork(data->philo, data->fork, data->printf_mutex);
 				take_a_left_fork(data->philo, data->fork, data->printf_mutex);
 			}
 			eat(data ->philo, data->philo_info, data->fork, data->printf_mutex);
-			data -> philo_info -> fork_lock[data -> philo -> left_fork] = 0;
-			data -> philo_info -> fork_lock[data -> philo -> right_fork] = 0;
+			lock_or_unlock_forklock(data, 0);
 			break ;
 		}
+		pthread_mutex_unlock(data -> philo_info -> fork_mutex);
 	}
 }
 
@@ -92,8 +107,14 @@ int	main(int argc, char **argv)
 	t_philosopher	**philos;
 	t_philo_info	*philo_info;
 	pthread_mutex_t	*fork;
+	pthread_mutex_t	eating_mutex;
+	pthread_mutex_t	fork_mutex;
 
 	philo_info = parse_argv(argc, argv);
+	philo_info -> fork_mutex = &fork_mutex;
+	philo_info -> eating_mutex = &eating_mutex;
+	pthread_mutex_init((philo_info -> fork_mutex), 0);
+	pthread_mutex_init((philo_info -> eating_mutex), 0);
 	philos = make_philos_list(philo_info);
 	fork = make_forks(philo_info);
 	start_philo_threads(philo_info, philos, fork);

@@ -3,27 +3,24 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: minjeon2 <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/17 20:52:41 by minjeon2          #+#    #+#              #
-#    Updated: 2023/08/17 20:52:43 by minjeon2         ###   ########.fr        #
+#    Updated: 2023/08/18 16:35:29 by minjeon2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 NAME = philo
-LIBFT = ./libft/libft.a
-LIBFT_DIR = libft
 SRCS = main.c utils.c acting.c philo_monitor.c list_maker.c
 OBJS = $(SRCS:.c=.o)
 
-.PHONY : clean fclean re all bonus
+.PHONY : clean fclean re all
 
 all: $(NAME)
 
 clean:
-	make -C $(LIBFT_DIR) fclean
 	rm -f $(OBJS)
 
 fclean:
@@ -33,11 +30,8 @@ re:
 	$(MAKE) fclean
 	$(MAKE) all
 
-$(NAME): $(OBJS) $(LIBFT)
+$(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $^ -o $@
 
-$(LIBFT):
-	make -C $(LIBFT_DIR) all
-
 %.o: %.c
-	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -c -o $@ $?
+	$(CC) $(CFLAGS) -c -o $@ $?
