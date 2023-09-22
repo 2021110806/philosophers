@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:19:14 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/08/18 20:30:05 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/09/22 19:15:27 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	is_all_philosophers_full(t_philosopher **philos, t_philo_info *philo_info)
 	i = 0;
 	while (i < philo_info -> number_of_philosophers)
 	{
-		if (is_philosopher_full(philos[i], philo_info))
+		if (!is_philosopher_full(philos[i], philo_info))
 			return (0);
 		i++;
 	}
@@ -45,7 +45,9 @@ t_philo_info *philo_info, pthread_mutex_t *printf_mutex)
 	pthread_mutex_lock((philo_info -> eating_mutex));
 	if (curr_time - philo -> last_eating >= philo_info -> time_to_die)
 	{
+		pthread_mutex_lock(philo_info -> died_philo_mutex);
 		philo_info -> died_philo = 1;
+		pthread_mutex_unlock(philo_info -> died_philo_mutex);
 		die(philo, printf_mutex);
 		pthread_mutex_unlock((philo_info -> eating_mutex));
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:37:48 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/08/18 20:13:00 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/09/22 19:16:32 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,13 @@ void	*cycle(void *inp)
 	{
 		if (is_philosopher_full(data -> philo, data -> philo_info))
 			return (0);
+		pthread_mutex_lock(data -> philo_info -> died_philo_mutex);
 		if (data -> philo_info -> died_philo)
+		{
+			pthread_mutex_unlock(data -> philo_info -> died_philo_mutex);
 			return (0);
+		}
+		pthread_mutex_unlock(data -> philo_info -> died_philo_mutex);
 		take_fork(data);
 		ft_sleep(data -> philo, data -> philo_info, data -> printf_mutex);
 		think(data -> philo, data -> printf_mutex);
@@ -111,6 +116,7 @@ int	main(int argc, char **argv)
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	eating_mutex;
 	pthread_mutex_t	fork_mutex;
+	pthread_mutex_t	died_philo_mutex;
 
 	if (!(argc == 5 || argc == 6))
 		return (1);
@@ -121,9 +127,11 @@ int	main(int argc, char **argv)
 	}
 	philo_info -> fork_mutex = &fork_mutex;
 	philo_info -> eating_mutex = &eating_mutex;
+	philo_info -> died_philo_mutex = &died_philo_mutex;
 	philo_info -> died_philo = 0;
 	pthread_mutex_init((philo_info -> fork_mutex), 0);
 	pthread_mutex_init((philo_info -> eating_mutex), 0);
+	pthread_mutex_init(philo_info -> died_philo_mutex, 0);
 	philos = make_philos_list(philo_info);
 	fork = make_forks(philo_info);
 	start_philo_threads(philo_info, philos, fork);
