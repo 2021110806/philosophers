@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:37:48 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/09/22 19:16:32 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/09/25 21:27:49 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,42 +29,70 @@ void	lock_or_unlock_forklock(t_data *data, int will_lock)
 	return ;
 }
 
-void	take_fork(t_data *data)
+int	take_fork(t_data *data)
 {
+	printf("in take fork\n");
 	while (1)
 	{
-		pthread_mutex_lock(data -> philo_info -> fork_mutex);
+		//pthread_mutex_lock(data -> philo_info -> fork_mutex);
+		//printf("%d wating\n", data -> philo -> id);
 		if (!(data -> philo_info -> fork_lock[data -> philo -> left_fork]) \
 		&& (!(data -> philo_info -> fork_lock[data -> philo -> right_fork])))
 		{
-			pthread_mutex_unlock(data -> philo_info -> fork_mutex);
+			printf("in if\n");
+			//pthread_mutex_unlock(data -> philo_info -> fork_mutex);
+			 lock_or_unlock_forklock(data, 1);
 			if (data -> philo -> id % 2 == 1)
 			{
-				take_a_left_fork(data -> philo, data->fork, data->printf_mutex);
-				take_a_right_fork(data->philo, data->fork, data->printf_mutex);
+				if (!take_a_left_fork(data -> philo, data->fork, data->printf_mutex, data -> philo_info))
+				{
+					lock_or_unlock_forklock(data, 0);
+					return (0);
+				}
+				if (!take_a_right_fork(data->philo, data->fork, data->printf_mutex, data -> philo_info))
+				{
+					lock_or_unlock_forklock(data, 0);
+					return (0);
+				}
 			}
 			else
 			{
-				take_a_right_fork(data->philo, data->fork, data->printf_mutex);
-				take_a_left_fork(data->philo, data->fork, data->printf_mutex);
+				//pthread_mutex_unlock(data -> philo_info -> fork_mutex);
+				if (!take_a_right_fork(data->philo, data->fork, data->printf_mutex, data -> philo_info))
+				{
+					lock_or_unlock_forklock(data, 0);
+					return (0);
+				}
+				if (!take_a_left_fork(data->philo, data->fork, data->printf_mutex, data -> philo_info))
+				{
+					lock_or_unlock_forklock(data, 0);
+					return (0);
+				}
 			}
-			eat(data ->philo, data->philo_info, data->fork, data->printf_mutex);
+			if (!eat(data ->philo, data->philo_info, data->fork, data->printf_mutex))
+			{
+				//pthread_mutex_unlock(data -> philo_info -> fork_mutex);
+				lock_or_unlock_forklock(data, 0);
+				return (0);
+			}
 			lock_or_unlock_forklock(data, 0);
 			break ;
 		}
-		pthread_mutex_unlock(data -> philo_info -> fork_mutex);
+		//pthread_mutex_unlock(data -> philo_info -> fork_mutex);
 	}
+	return (1);
 }
+
 
 void	*cycle(void *inp)
 {
 	t_data	*data;
 
 	data = (t_data *) inp;
+	if (data -> philo -> id % 2 == 0)
+		usleep(1000);
 	while (1)
 	{
-		if (is_philosopher_full(data -> philo, data -> philo_info))
-			return (0);
 		pthread_mutex_lock(data -> philo_info -> died_philo_mutex);
 		if (data -> philo_info -> died_philo)
 		{
@@ -72,9 +100,14 @@ void	*cycle(void *inp)
 			return (0);
 		}
 		pthread_mutex_unlock(data -> philo_info -> died_philo_mutex);
-		take_fork(data);
-		ft_sleep(data -> philo, data -> philo_info, data -> printf_mutex);
-		think(data -> philo, data -> printf_mutex);
+		if (!take_fork(data))
+			return (0);
+		if (is_philosopher_full(data -> philo, data -> philo_info))
+			return (0);
+		if(!ft_sleep(data -> philo, data -> philo_info, data -> printf_mutex))
+			return (0);
+		if(!think(data -> philo, data -> philo_info, data -> printf_mutex))
+			return (0);
 	}
 	free(data);
 	return (0);
@@ -129,6 +162,7 @@ int	main(int argc, char **argv)
 	philo_info -> eating_mutex = &eating_mutex;
 	philo_info -> died_philo_mutex = &died_philo_mutex;
 	philo_info -> died_philo = 0;
+	philo_info -> all_full = 0;
 	pthread_mutex_init((philo_info -> fork_mutex), 0);
 	pthread_mutex_init((philo_info -> eating_mutex), 0);
 	pthread_mutex_init(philo_info -> died_philo_mutex, 0);

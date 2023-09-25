@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:52:24 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/09/22 19:02:43 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:26:50 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_philo_info {
 	int				number_of_times_each_philosopher_must_eat;
 	int				*fork_lock;
 	int				died_philo;
+	int				all_full;
 	pthread_mutex_t	*died_philo_mutex;
 	pthread_mutex_t	*fork_mutex;
 	pthread_mutex_t	*eating_mutex;
@@ -48,16 +49,17 @@ typedef struct s_data {
 	pthread_mutex_t	*printf_mutex;
 }	t_data;
 
-void			ft_sleep(t_philosopher *philo, t_philo_info *philo_info, \
+int	ft_sleep(t_philosopher *philo, t_philo_info *philo_info, \
 pthread_mutex_t *printf_mutex);
-void			think(t_philosopher *philo, pthread_mutex_t *printf_mutex);
-void			take_a_left_fork(t_philosopher *philo, pthread_mutex_t *fork, \
-pthread_mutex_t *printf_mutex);
-void			take_a_right_fork(t_philosopher *philo, pthread_mutex_t *fork, \
-pthread_mutex_t *printf_mutex);
-void			eat(t_philosopher *philo, t_philo_info *philo_info, \
+int	think(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *printf_mutex);
+int	take_a_left_fork(t_philosopher *philo, pthread_mutex_t *fork, \
+pthread_mutex_t *printf_mutex, t_philo_info *philo_info);
+int	take_a_right_fork(t_philosopher *philo, pthread_mutex_t *fork, \
+pthread_mutex_t *printf_mutex, t_philo_info *philo_info);
+int	eat(t_philosopher *philo, t_philo_info *philo_info, \
 pthread_mutex_t *fork, pthread_mutex_t *printf_mutex);
-void			die(t_philosopher *philo, pthread_mutex_t *printf_mutex);
+void			die(t_philosopher *philo, pthread_mutex_t *printf_mutex, \
+struct timeval time);
 int				check_if_philosopher_starve(t_philosopher *philo, \
 t_philo_info *philo_info, pthread_mutex_t *printf_mutex);
 long long		get_time_in_milliseconds(struct timeval *time);
