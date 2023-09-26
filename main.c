@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:37:48 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/09/25 21:27:49 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/09/26 20:57:17 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,55 +31,22 @@ void	lock_or_unlock_forklock(t_data *data, int will_lock)
 
 int	take_fork(t_data *data)
 {
-	printf("in take fork\n");
-	while (1)
-	{
-		//pthread_mutex_lock(data -> philo_info -> fork_mutex);
-		//printf("%d wating\n", data -> philo -> id);
-		if (!(data -> philo_info -> fork_lock[data -> philo -> left_fork]) \
-		&& (!(data -> philo_info -> fork_lock[data -> philo -> right_fork])))
-		{
-			printf("in if\n");
-			//pthread_mutex_unlock(data -> philo_info -> fork_mutex);
-			 lock_or_unlock_forklock(data, 1);
 			if (data -> philo -> id % 2 == 1)
 			{
 				if (!take_a_left_fork(data -> philo, data->fork, data->printf_mutex, data -> philo_info))
-				{
-					lock_or_unlock_forklock(data, 0);
 					return (0);
-				}
 				if (!take_a_right_fork(data->philo, data->fork, data->printf_mutex, data -> philo_info))
-				{
-					lock_or_unlock_forklock(data, 0);
 					return (0);
-				}
 			}
 			else
 			{
-				//pthread_mutex_unlock(data -> philo_info -> fork_mutex);
 				if (!take_a_right_fork(data->philo, data->fork, data->printf_mutex, data -> philo_info))
-				{
-					lock_or_unlock_forklock(data, 0);
 					return (0);
-				}
 				if (!take_a_left_fork(data->philo, data->fork, data->printf_mutex, data -> philo_info))
-				{
-					lock_or_unlock_forklock(data, 0);
 					return (0);
-				}
 			}
 			if (!eat(data ->philo, data->philo_info, data->fork, data->printf_mutex))
-			{
-				//pthread_mutex_unlock(data -> philo_info -> fork_mutex);
-				lock_or_unlock_forklock(data, 0);
 				return (0);
-			}
-			lock_or_unlock_forklock(data, 0);
-			break ;
-		}
-		//pthread_mutex_unlock(data -> philo_info -> fork_mutex);
-	}
 	return (1);
 }
 

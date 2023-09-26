@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:19:14 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/09/25 20:55:31 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/09/26 20:49:48 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	*monitoring_if_there_is_starve_philosopher(void *inp)
 	data = (t_data *) inp;
 	while (1)
 	{
+		usleep(1000);
 		if (is_all_philosophers_full(data -> philos, data -> philo_info))
 		{
 			data -> philo_info -> all_full = 1;

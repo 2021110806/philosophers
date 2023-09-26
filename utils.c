@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:10:41 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/09/25 21:07:30 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/09/26 20:50:15 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ struct timeval *start_time, int is_sleep)
 			get_time_in_milliseconds(start_time) >= \
 			philo_info -> time_to_sleep && is_sleep)
 				break ;
-			usleep(5);
+			usleep(100);
 		}
 	}
 	else
@@ -52,7 +52,7 @@ struct timeval *start_time, int is_sleep)
 			get_time_in_milliseconds(start_time) >= \
 			philo_info -> time_to_eat && !is_sleep)
 				break ;
-			usleep(3);
+			usleep(100);
 		}	
 	}
 }
