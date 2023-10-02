@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:10:41 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/10/02 17:37:32 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/02 22:31:19 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,33 +52,33 @@ t_philo_info	*parse_argv(int argc, char **argv)
 	t_philo_info	*philo_info;
 
 	philo_info = malloc (sizeof(t_philo_info));
+	if (is_overflow_longlong(argv, philo_info))
+		return (0);
 	philo_info -> number_of_philosophers = ft_atoi(argv[1]);
 	philo_info -> time_to_die = ft_atoi(argv[2]);
 	philo_info -> time_to_eat = ft_atoi(argv[3]);
 	philo_info -> time_to_sleep = ft_atoi(argv[4]);
 	if (argc == 6)
+	{
+		if (ft_strlen(argv[5]) > 10)
+			return (0);
 		philo_info -> \
 		number_of_times_each_philosopher_must_eat = (int) ft_atoi(argv[5]);
-	else
-		philo_info -> number_of_times_each_philosopher_must_eat = 2147483647;
-	if (!philo_info -> time_to_die || !philo_info -> time_to_eat \
-	|| !philo_info -> time_to_sleep || \
-	!philo_info -> number_of_philosophers || \
-	!philo_info ->number_of_times_each_philosopher_must_eat)
-	{
-		free(philo_info);
-		return (0);
 	}
+	else
+		philo_info -> number_of_times_each_philosopher_must_eat = -1;
+	if (!is_argv_validate(philo_info))
+		return (0);
 	philo_info -> fork_lock = \
 	malloc (sizeof(int) * philo_info -> number_of_philosophers);
 	return (philo_info);
 }
 
-int	ft_atoi(const char *str)
+long long	ft_atoi(const char *str)
 {
-	int	i;
-	int	minus;
-	int	return_value;
+	int			i;
+	int			minus;
+	long long	return_value;
 
 	i = 0;
 	minus = 1;
@@ -98,5 +98,7 @@ int	ft_atoi(const char *str)
 		return_value = return_value * 10 + minus * (str[i] - 48);
 		i++;
 	}
+	if (return_value > 2147483647)
+		return_value = -1;
 	return (return_value);
 }

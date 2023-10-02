@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:52:24 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/10/02 18:00:47 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/02 22:39:25 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,13 @@ t_philo_info *philo_info);
 t_philosopher	**make_philos_list(t_philo_info *philo_info);
 pthread_mutex_t	*make_forks(t_philo_info *philo_info);
 void			lock_or_unlock_forklock(t_data *data, int will_lock);
-int				ft_atoi(const char *str);
+long long		ft_atoi(const char *str);
 void			free_ptr(t_philosopher **philos, \
 t_philo_info *philo_info);
+int				ft_strlen(char *s);
+int				is_args_validate(t_philo_info *philo_info);
+int				is_overflow_longlong(char **argv, t_philo_info *philo_info);
+int				is_argv_validate(t_philo_info *philo_info);
+void			wait_threads(t_data *data);
+void			*free_data(t_data *data);
 #endif
