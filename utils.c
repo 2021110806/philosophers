@@ -6,13 +6,14 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:10:41 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/09/26 20:50:15 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/02 17:37:32 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	die(t_philosopher *philo, pthread_mutex_t *printf_mutex, struct timeval time)
+void	die(t_philosopher *philo, pthread_mutex_t *printf_mutex, \
+struct timeval time)
 {
 	pthread_mutex_lock(printf_mutex);
 	printf("%lld %d is died\n", get_time_in_milliseconds(&time) - \
@@ -31,30 +32,19 @@ struct timeval *start_time, int is_sleep)
 {
 	struct timeval	time;
 
-	if (is_sleep)
+	while (1)
 	{
-		while(1)
-		{
-			gettimeofday(&time, 0);
-			if (get_time_in_milliseconds(&time) - \
-			get_time_in_milliseconds(start_time) >= \
-			philo_info -> time_to_sleep && is_sleep)
-				break ;
-			usleep(100);
-		}
-	}
-	else
-	{
-		while (1)
-		{
-			gettimeofday(&time, 0);
-			if (get_time_in_milliseconds(&time) - \
-			get_time_in_milliseconds(start_time) >= \
-			philo_info -> time_to_eat && !is_sleep)
-				break ;
-			usleep(100);
-		}	
-	}
+		gettimeofday(&time, 0);
+		if (get_time_in_milliseconds(&time) - \
+		get_time_in_milliseconds(start_time) >= \
+		philo_info -> time_to_sleep && is_sleep)
+			break ;
+		if (get_time_in_milliseconds(&time) - \
+		get_time_in_milliseconds(start_time) >= \
+		philo_info -> time_to_eat && !is_sleep)
+			break ;
+		usleep(100);
+	}	
 }
 
 t_philo_info	*parse_argv(int argc, char **argv)

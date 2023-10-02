@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:52:24 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/09/25 20:26:50 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/02 18:00:47 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_philo_info {
 	int				*fork_lock;
 	int				died_philo;
 	int				all_full;
+	t_philosopher	**philos;
 	pthread_mutex_t	*died_philo_mutex;
 	pthread_mutex_t	*fork_mutex;
 	pthread_mutex_t	*eating_mutex;
@@ -47,16 +48,18 @@ typedef struct s_data {
 	t_philo_info	*philo_info;
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	*printf_mutex;
+	int				is_free;
 }	t_data;
 
-int	ft_sleep(t_philosopher *philo, t_philo_info *philo_info, \
+int				ft_sleep(t_philosopher *philo, t_philo_info *philo_info, \
 pthread_mutex_t *printf_mutex);
-int	think(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *printf_mutex);
-int	take_a_left_fork(t_philosopher *philo, pthread_mutex_t *fork, \
+int				think(t_philosopher *philo, t_philo_info *philo_info, \
+pthread_mutex_t *printf_mutex);
+int				take_a_left_fork(t_philosopher *philo, pthread_mutex_t *fork, \
 pthread_mutex_t *printf_mutex, t_philo_info *philo_info);
-int	take_a_right_fork(t_philosopher *philo, pthread_mutex_t *fork, \
+int				take_a_right_fork(t_philosopher *philo, pthread_mutex_t *fork, \
 pthread_mutex_t *printf_mutex, t_philo_info *philo_info);
-int	eat(t_philosopher *philo, t_philo_info *philo_info, \
+int				eat(t_philosopher *philo, t_philo_info *philo_info, \
 pthread_mutex_t *fork, pthread_mutex_t *printf_mutex);
 void			die(t_philosopher *philo, pthread_mutex_t *printf_mutex, \
 struct timeval time);

@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:37:48 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/09/26 20:57:17 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/02 18:33:47 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,28 @@ void	lock_or_unlock_forklock(t_data *data, int will_lock)
 
 int	take_fork(t_data *data)
 {
-			if (data -> philo -> id % 2 == 1)
-			{
-				if (!take_a_left_fork(data -> philo, data->fork, data->printf_mutex, data -> philo_info))
-					return (0);
-				if (!take_a_right_fork(data->philo, data->fork, data->printf_mutex, data -> philo_info))
-					return (0);
-			}
-			else
-			{
-				if (!take_a_right_fork(data->philo, data->fork, data->printf_mutex, data -> philo_info))
-					return (0);
-				if (!take_a_left_fork(data->philo, data->fork, data->printf_mutex, data -> philo_info))
-					return (0);
-			}
-			if (!eat(data ->philo, data->philo_info, data->fork, data->printf_mutex))
-				return (0);
+	if (data -> philo -> id % 2 == 1)
+	{
+		if (!take_a_left_fork(data -> philo, data->fork, \
+		data->printf_mutex, data -> philo_info))
+			return (0);
+		if (!take_a_right_fork(data->philo, data->fork, \
+		data->printf_mutex, data -> philo_info))
+			return (0);
+	}
+	else
+	{
+		if (!take_a_right_fork(data->philo, data->fork, \
+		data->printf_mutex, data -> philo_info))
+			return (0);
+		if (!take_a_left_fork(data->philo, data->fork, \
+		data->printf_mutex, data -> philo_info))
+			return (0);
+	}
+	if (!eat(data ->philo, data->philo_info, data->fork, data->printf_mutex))
+		return (0);
 	return (1);
 }
-
 
 void	*cycle(void *inp)
 {
@@ -71,17 +74,16 @@ void	*cycle(void *inp)
 			return (0);
 		if (is_philosopher_full(data -> philo, data -> philo_info))
 			return (0);
-		if(!ft_sleep(data -> philo, data -> philo_info, data -> printf_mutex))
+		if (!ft_sleep(data -> philo, data -> philo_info, data -> printf_mutex))
 			return (0);
-		if(!think(data -> philo, data -> philo_info, data -> printf_mutex))
+		if (!think(data -> philo, data -> philo_info, data -> printf_mutex))
 			return (0);
 	}
 	free(data);
 	return (0);
 }
 
-void	start_philo_threads(t_philo_info *philo_info, \
-t_philosopher **philos, pthread_mutex_t *fork)
+void	start_philo_threads(t_philo_info *philo_info, pthread_mutex_t *fork)
 {
 	t_data				*data;
 	struct timeval		time;
@@ -95,7 +97,7 @@ t_philosopher **philos, pthread_mutex_t *fork)
 	while (i < philo_info -> number_of_philosophers)
 	{
 		data = malloc (sizeof (t_data));
-		data -> philo = philos[i];
+		data -> philo = philo_info -> philos[i];
 		data -> philo_info = philo_info;
 		data -> printf_mutex = &printf_mutex;
 		data -> fork = fork;
@@ -105,13 +107,12 @@ t_philosopher **philos, pthread_mutex_t *fork)
 		pthread_create(&threads[i], 0, cycle, data);
 		i++;
 	}
-	data -> philos = philos;
+	data -> philos = philo_info -> philos;
 	start_monitoring_thread(data, threads);
 }
 
 int	main(int argc, char **argv)
 {
-	t_philosopher	**philos;
 	t_philo_info	*philo_info;
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	eating_mutex;
@@ -122,9 +123,7 @@ int	main(int argc, char **argv)
 		return (1);
 	philo_info = parse_argv(argc, argv);
 	if (!philo_info)
-	{
 		return (1);
-	}
 	philo_info -> fork_mutex = &fork_mutex;
 	philo_info -> eating_mutex = &eating_mutex;
 	philo_info -> died_philo_mutex = &died_philo_mutex;
@@ -133,10 +132,10 @@ int	main(int argc, char **argv)
 	pthread_mutex_init((philo_info -> fork_mutex), 0);
 	pthread_mutex_init((philo_info -> eating_mutex), 0);
 	pthread_mutex_init(philo_info -> died_philo_mutex, 0);
-	philos = make_philos_list(philo_info);
+	philo_info -> philos = make_philos_list(philo_info);
 	fork = make_forks(philo_info);
-	start_philo_threads(philo_info, philos, fork);
+	start_philo_threads(philo_info, fork);
 	free(fork);
-	free_ptr(philos, philo_info);
+	free_ptr(philo_info -> philos, philo_info);
 	return (0);
 }

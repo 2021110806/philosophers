@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:06:16 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/09/26 20:55:16 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/02 16:57:11 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ pthread_mutex_t *printf_mutex)
 	return (1);
 }
 
-int	think(t_philosopher *philo, t_philo_info *philo_info, pthread_mutex_t *printf_mutex)
+int	think(t_philosopher *philo, t_philo_info *philo_info, \
+pthread_mutex_t *printf_mutex)
 {
 	struct timeval	time;
 
