@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:19:14 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/10/02 18:22:07 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/04 21:23:37 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	is_philosopher_full(t_philosopher *philo, t_philo_info *philo_info)
 {
 	if (philo ->number_of_eating < philo_info -> \
-	number_of_times_each_philosopher_must_eat)
+	number_of_times_each_philosopher_must_eat || \
+	philo_info -> number_of_philosophers != -1)
 		return (0);
 	return (1);
 }

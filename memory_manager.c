@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 17:56:28 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/10/02 22:44:55 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/04 21:21:29 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	is_args_validate(t_philo_info *philo_info)
 {
 	if (!(philo_info -> time_to_die >= 0 && philo_info -> time_to_eat >= 0 && \
 	philo_info -> time_to_sleep && philo_info -> \
-	number_of_times_each_philosopher_must_eat >= 0 && \
+	number_of_times_each_philosopher_must_eat >= -1 && \
 	philo_info -> number_of_philosophers > 0))
 	{
 		free(philo_info -> fork_lock);
