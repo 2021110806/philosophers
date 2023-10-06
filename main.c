@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:37:48 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/10/02 22:41:56 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/06 21:40:39 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,24 +59,25 @@ void	*cycle(void *inp)
 	t_data	*data;
 
 	data = (t_data *) inp;
-	wait_threads(data);
+	if (data -> philo_info -> number_of_philosophers % 2 == 0)
+		wait_threads(data);
 	while (1)
 	{
 		pthread_mutex_lock(data -> philo_info -> died_philo_mutex);
 		if (data -> philo_info -> died_philo)
 		{
 			pthread_mutex_unlock(data -> philo_info -> died_philo_mutex);
-			return (0);
+			return (free_data(data));
 		}
 		pthread_mutex_unlock(data -> philo_info -> died_philo_mutex);
 		if (!take_fork(data))
-			return (0);
+			return (free_data(data));
 		if (is_philosopher_full(data -> philo, data -> philo_info))
 			return (free_data(data));
 		if (!ft_sleep(data -> philo, data -> philo_info, data -> printf_mutex))
-			return (0);
+			return (free_data(data));
 		if (!think(data -> philo, data -> philo_info, data -> printf_mutex))
-			return (0);
+			return (free_data(data));
 	}
 	free(data);
 	return (0);
@@ -110,11 +111,6 @@ void	start_philo_threads(t_philo_info *philo_info, pthread_mutex_t *fork)
 	start_monitoring_thread(data, threads);
 }
 
-void a(void)
-{
-	system("leaks philo");
-}
-
 int	main(int argc, char **argv)
 {
 	t_philo_info	*philo_info;
@@ -123,7 +119,6 @@ int	main(int argc, char **argv)
 	pthread_mutex_t	fork_mutex;
 	pthread_mutex_t	died_philo_mutex;
 
-	atexit(a);
 	if (!(argc == 5 || argc == 6))
 		return (1);
 	philo_info = parse_argv(argc, argv);

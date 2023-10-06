@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 22:37:17 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/10/02 22:39:19 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/06 21:41:04 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,11 @@ void	wait_threads(t_data *data)
 void	*free_data(t_data *data)
 {
 	free(data);
+	return (0);
+}
+
+void	*free_philo_info(t_philo_info *philo_info)
+{
+	free(philo_info);
 	return (0);
 }

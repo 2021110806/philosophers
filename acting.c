@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:06:16 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/10/02 16:57:11 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/06 21:38:49 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ pthread_mutex_t *printf_mutex)
 	philo -> birth_time, philo -> id);
 	pthread_mutex_unlock(printf_mutex);
 	wait_for_sleeping_or_eating(philo_info, &time, 1);
+	usleep(200);
 	return (1);
 }
 
@@ -66,6 +67,8 @@ pthread_mutex_t *printf_mutex, t_philo_info *philo_info)
 		return (0);
 	}
 	pthread_mutex_lock(printf_mutex);
+	printf("%lld %d has taken a fork\n", get_time_in_milliseconds(&time) \
+	- philo -> birth_time, philo -> id);
 	pthread_mutex_unlock(printf_mutex);
 	return (1);
 }

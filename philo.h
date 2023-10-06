@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:52:24 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/10/02 22:39:25 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/06 20:45:37 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,5 @@ int				is_overflow_longlong(char **argv, t_philo_info *philo_info);
 int				is_argv_validate(t_philo_info *philo_info);
 void			wait_threads(t_data *data);
 void			*free_data(t_data *data);
+void			*free_philo_info(t_philo_info *philo_info);
 #endif
