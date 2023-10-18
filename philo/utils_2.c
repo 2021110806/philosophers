@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 22:37:17 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/10/18 20:10:30 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/18 21:05:38 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,19 @@ void	*free_philo_info(t_philo_info *philo_info)
 {
 	free(philo_info);
 	return (0);
+}
+
+void	*ft_memset(void *b, int c, size_t len)
+{
+	size_t			i;
+	unsigned char	*return_value;
+
+	return_value = (unsigned char *) b;
+	i = 0;
+	while (i < len)
+	{
+		return_value[i] = (unsigned char) c;
+		i++;
+	}
+	return ((void *) return_value);
 }

@@ -6,17 +6,20 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:52:24 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/10/18 20:35:47 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/18 21:05:46 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
+# define true 1
+# define false 0
 # include <unistd.h>
 # include <stdlib.h>
 # include <pthread.h>
 # include <sys/time.h>
 # include <stdio.h>
+# include <stdbool.h>
 
 typedef struct s_philosopher {
 	int			id;
@@ -33,12 +36,11 @@ typedef struct s_philo_info {
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				number_of_times_each_philosopher_must_eat;
-	int				*fork_lock;
 	int				died_philo;
 	int				all_full;
+	int				*fork;
 	t_philosopher	*philos;
 	pthread_mutex_t	*died_philo_mutex;
-	pthread_mutex_t	*fork_mutex;
 	pthread_mutex_t	*eating_mutex;
 }	t_philo_info;
 
@@ -46,7 +48,7 @@ typedef struct s_data {
 	int				id;
 	t_philosopher	*philos;
 	t_philo_info	*philo_info;
-	pthread_mutex_t	*fork;
+	pthread_mutex_t	*fork_mutex;
 	pthread_mutex_t	*printf_mutex;
 	int				is_free;
 }	t_data;
@@ -86,4 +88,5 @@ int				is_argv_validate(t_philo_info *philo_info);
 void			wait_threads(t_data *data);
 void			*free_data(t_data *data);
 void			*free_philo_info(t_philo_info *philo_info);
+void			*ft_memset(void *b, int c, size_t len);
 #endif

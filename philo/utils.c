@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:10:41 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/10/18 19:51:30 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/18 20:49:23 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,6 @@ t_philo_info	*parse_argv(int argc, char **argv)
 		philo_info -> number_of_times_each_philosopher_must_eat = -1;
 	if (!is_argv_validate(philo_info))
 		return (0);
-		philo_info -> fork_lock = \
-	malloc (sizeof(int) * philo_info -> number_of_philosophers);
 	return (philo_info);
 }
 

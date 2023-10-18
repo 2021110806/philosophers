@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:18:23 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/10/18 20:15:04 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/18 20:49:26 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ t_philosopher	*make_philos_list(t_philo_info *philo_info)
 			philos[i].right_fork = 0;
 		else
 			philos[i].right_fork = i + 1;
-		philo_info -> fork_lock[i] = 0;
 		philos[i].number_of_eating = 0;
 		i++;
 	}
