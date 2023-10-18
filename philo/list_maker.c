@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:18:23 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/08/18 17:39:39 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/18 20:15:04 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,27 +28,26 @@ pthread_mutex_t	*make_forks(t_philo_info *philo_info)
 	return (fork);
 }
 
-t_philosopher	**make_philos_list(t_philo_info *philo_info)
+t_philosopher	*make_philos_list(t_philo_info *philo_info)
 {
 	int				i;
-	t_philosopher	**philos;
-	t_philosopher	*philo;
+	t_philosopher	*philos;
 
 	i = 0;
-	philos = malloc (sizeof (t_philosopher *) * \
+	philos = malloc (sizeof (t_philosopher) * \
 	philo_info -> number_of_philosophers);
+	if (!philos)
+		return (0);
 	while (i < philo_info -> number_of_philosophers)
 	{
-		philo = malloc (sizeof(t_philosopher));
-		philo -> id = i + 1;
-		philo -> left_fork = i;
+		philos[i].id = i;
+		philos[i].left_fork = i;
 		if (i == philo_info -> number_of_philosophers - 1)
-			philo -> right_fork = 0;
+			philos[i].right_fork = 0;
 		else
-			philo -> right_fork = i + 1;
+			philos[i].right_fork = i + 1;
 		philo_info -> fork_lock[i] = 0;
-		philo -> number_of_eating = 0;
-		philos[i] = philo;
+		philos[i].number_of_eating = 0;
 		i++;
 	}
 	return (philos);

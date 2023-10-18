@@ -6,18 +6,18 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:10:41 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/10/06 21:39:16 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/18 19:51:30 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	die(t_philosopher *philo, pthread_mutex_t *printf_mutex, \
+void	die(t_philosopher philo, pthread_mutex_t *printf_mutex, \
 struct timeval time)
 {
 	pthread_mutex_lock(printf_mutex);
-	printf("%lld %d is died\n", get_time_in_milliseconds(&time) - \
-	philo -> birth_time, philo -> id);
+	printf("%lld %d died\n", get_time_in_milliseconds(&time) - \
+	philo.birth_time, philo.id);
 	pthread_mutex_unlock(printf_mutex);
 	return ;
 }

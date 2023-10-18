@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/minjeon2/fin",
-      "program": "/Users/minjeon2/fin/build/Debug/outDebug"
+      "cwd": "/Users/minjeon2/retry",
+      "program": "/Users/minjeon2/retry/build/Debug/outDebug"
     }
   ]
 }
