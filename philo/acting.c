@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:06:16 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/10/18 21:05:02 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/10/18 21:20:28 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ pthread_mutex_t *printf_mutex, t_philo_info *philo_info)
 	gettimeofday(&time, 0);
 	if (philo_info -> died_philo || philo_info -> all_full)
 	{
-		pthread_mutex_unlock(printf_mutex);
+		pthread_mutex_unlock(&fork_mutex[data -> philos[data -> id].left_fork]);
 		return (0);
 	}
 	pthread_mutex_lock(printf_mutex);
