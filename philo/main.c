@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:37:48 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/11/19 22:12:42 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/11/19 22:27:01 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,6 @@ int	main(int argc, char **argv)
 	if (!fork_mutex || !philo_info -> philos)
 		return (1);
 	start_philos_threads(philo_info, fork_mutex, &printf_mutex);
-	free_ptr(philo_info -> philos, philo_info);
+	free_ptr(philo_info -> philos, philo_info, fork_mutex);
 	return (0);
 }

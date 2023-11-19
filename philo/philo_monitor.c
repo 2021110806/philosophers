@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:19:14 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/11/19 22:10:46 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/11/19 22:19:11 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ void	start_monitoring_thread(t_data *data, pthread_t *threads)
 			pthread_join(threads[i], 0);
 	}
 	pthread_join(*monitoring, 0);
+	free(data);
 	free(monitoring);
 	free(threads);
 }

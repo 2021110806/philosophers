@@ -6,14 +6,16 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 17:56:28 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/11/19 20:11:54 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/11/19 22:27:42 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	free_ptr(t_philosopher *philos, t_philo_info *philo_info)
+void	free_ptr(t_philosopher *philos, t_philo_info *philo_info, pthread_mutex_t *fork_mutex)
 {
+	free(fork_mutex);
+	free(philo_info -> fork);
 	free(philos);
 	free(philo_info);
 }
