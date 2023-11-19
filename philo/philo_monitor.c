@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:19:14 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/10/18 21:15:55 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/11/19 22:10:46 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 int	is_philosopher_full(t_philosopher philo, t_philo_info *philo_info)
 {
-	if (philo_info -> number_of_times_each_philosopher_must_eat == -1)
+	if (philo_info->times_each_philosopher_must_eat == -1)
 		return (0);
-	if (philo.number_of_eating < philo_info -> \
-	number_of_times_each_philosopher_must_eat)
+	if (philo.number_of_eating < philo_info->times_each_philosopher_must_eat)
 		return (0);
 	return (1);
 }
@@ -89,15 +88,22 @@ void	start_monitoring_thread(t_data *data, pthread_t *threads)
 	pthread_t		*monitoring;
 
 	monitoring = malloc (sizeof (pthread_t *));
+	if (!monitoring)
+	{
+		free(threads);
+		return ;
+	}
 	pthread_create(monitoring, 0, \
 	monitoring_if_there_is_starve_philosopher, data);
-	i = 0;
-	while (i < data -> philo_info -> number_of_philosophers)
+	i = -1;
+	if (data -> philo_info -> number_of_philosophers == 1)
+		pthread_detach(threads[0]);
+	else
 	{
-		pthread_join(threads[i], 0);
-		pthread_join(*monitoring, 0);
-		i++;
+		while (++i < data -> philo_info -> number_of_philosophers)
+			pthread_join(threads[i], 0);
 	}
+	pthread_join(*monitoring, 0);
 	free(monitoring);
 	free(threads);
 }
