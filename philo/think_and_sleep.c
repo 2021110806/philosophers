@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:06:16 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/11/20 18:12:31 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/11/20 19:46:57 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,15 @@ pthread_mutex_t *printf_mutex)
 {
 	struct timeval	time;
 
-	pthread_mutex_lock(printf_mutex);
+	pthread_mutex_lock(philo_info -> termination_philo_mutex);
 	if (philo_info -> died_philo || philo_info -> all_full)
 	{
-		pthread_mutex_unlock(printf_mutex);
+		pthread_mutex_unlock(philo_info -> termination_philo_mutex);
 		return (0);
 	}
+	pthread_mutex_unlock(philo_info -> termination_philo_mutex);
 	gettimeofday(&time, 0);
+	pthread_mutex_lock(printf_mutex);
 	printf("%lld %d is thinking\n", get_time_in_milliseconds(&time) - \
 	data -> philos[data -> id].birth_time, data ->id);
 	pthread_mutex_unlock(printf_mutex);

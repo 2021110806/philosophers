@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:19:14 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/11/20 18:13:07 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/11/20 19:45:59 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,9 @@ void	*monitoring_if_there_is_starve_philosopher(void *inp)
 		usleep(500);
 		if (is_all_philosophers_full(data -> philos, data -> philo_info))
 		{
+			pthread_mutex_lock(data -> philo_info -> termination_philo_mutex);
 			data -> philo_info -> all_full = 1;
+			pthread_mutex_unlock(data -> philo_info -> termination_philo_mutex);
 			return (0);
 		}
 		if (i >= data -> philo_info -> number_of_philosophers)
