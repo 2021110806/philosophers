@@ -6,11 +6,40 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:18:23 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/11/19 21:06:44 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/11/20 18:31:37 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h" 
+
+t_philo_info	*parse_argv(int argc, char **argv)
+{
+	t_philo_info	*philo_info;
+
+	if (!(argc == 5 || argc == 6))
+		return (0);
+	philo_info = malloc (sizeof(t_philo_info));
+	ft_memset(philo_info, 0, sizeof(t_philo_info));
+	if (is_overflow_longlong(argv, philo_info))
+		return (0);
+	philo_info -> number_of_philosophers = ft_atoi(argv[1]);
+	philo_info -> time_to_die = ft_atoi(argv[2]);
+	philo_info -> time_to_eat = ft_atoi(argv[3]);
+	philo_info -> time_to_sleep = ft_atoi(argv[4]);
+	if (argc == 6)
+	{
+		if (ft_strlen(argv[5]) > 10)
+			return (0);
+		philo_info->times_each_philosopher_must_eat = ft_atoi(argv[5]);
+		if (philo_info -> times_each_philosopher_must_eat < 0)
+			return (free_philo_info(philo_info));
+	}
+	else
+		philo_info -> times_each_philosopher_must_eat = -1;
+	if (!is_argv_validate(philo_info))
+		return (0);
+	return (philo_info);
+}
 
 pthread_mutex_t	*make_forks(t_philo_info *philo_info)
 {

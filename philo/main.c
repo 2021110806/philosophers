@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 18:37:48 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/11/19 22:27:01 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/11/20 18:34:22 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ void	*cycle(void *inp)
 		wait_threads(data);
 	while (1)
 	{
-		pthread_mutex_lock(data -> philo_info -> died_philo_mutex);
+		pthread_mutex_lock(data -> philo_info -> termination_philo_mutex);
 		if (data -> philo_info -> died_philo)
 		{
-			pthread_mutex_unlock(data -> philo_info -> died_philo_mutex);
+			pthread_mutex_unlock(data -> philo_info -> termination_philo_mutex);
 			return (free_data(data));
 		}
-		pthread_mutex_unlock(data -> philo_info -> died_philo_mutex);
+		pthread_mutex_unlock(data -> philo_info -> termination_philo_mutex);
 		if (!take_fork(data))
 			return (free_data(data));
 		if (is_philosopher_full(data -> philos[data -> id], data -> philo_info))
@@ -89,20 +89,19 @@ int	main(int argc, char **argv)
 	t_philo_info	*philo_info;
 	pthread_mutex_t	*fork_mutex;
 	pthread_mutex_t	eating_mutex;
-	pthread_mutex_t	died_philos_mutex;
+	pthread_mutex_t	termination_philo_mutex;
 	pthread_mutex_t	printf_mutex;
 
 	philo_info = parse_argv(argc, argv);
 	if (!philo_info || !is_args_validate(philo_info))
 		return (1);
 	philo_info -> eating_mutex = &eating_mutex;
-	philo_info -> died_philo_mutex = &died_philos_mutex;
-	philo_info -> fork = malloc (sizeof(int) * \
-	philo_info->number_of_philosophers);
+	philo_info -> termination_philo_mutex = &termination_philo_mutex;
+	philo_info->fork = ft_calloc(philo_info->number_of_philosophers, INT_SIZE);
 	if (!philo_info -> fork)
 		return (1);
 	pthread_mutex_init((philo_info -> eating_mutex), 0);
-	pthread_mutex_init(philo_info -> died_philo_mutex, 0);
+	pthread_mutex_init(philo_info -> termination_philo_mutex, 0);
 	pthread_mutex_init(&printf_mutex, 0);
 	philo_info -> philos = make_philos_list(philo_info);
 	fork_mutex = make_forks(philo_info);

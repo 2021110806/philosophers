@@ -6,7 +6,7 @@
 /*   By: minjeon2 <qwer10897@naver.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 20:52:24 by minjeon2          #+#    #+#             */
-/*   Updated: 2023/11/19 22:27:58 by minjeon2         ###   ########.fr       */
+/*   Updated: 2023/11/20 18:41:15 by minjeon2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PHILO_H
 # define TRUE 1
 # define FALSE 0
+# define INT_SIZE 4
 # include <unistd.h>
 # include <stdlib.h>
 # include <pthread.h>
@@ -39,7 +40,7 @@ typedef struct s_philo_info {
 	int				all_full;
 	int				*fork;
 	t_philosopher	*philos;
-	pthread_mutex_t	*died_philo_mutex;
+	pthread_mutex_t	*termination_philo_mutex;
 	pthread_mutex_t	*eating_mutex;
 }	t_philo_info;
 
@@ -91,4 +92,9 @@ void			wait_threads(t_data *data);
 void			*free_data(t_data *data);
 void			*free_philo_info(t_philo_info *philo_info);
 void			*ft_memset(void *b, int c, size_t len);
+void			*ft_calloc(size_t count, size_t size);
+int				take_a_right_fork(t_data *data, pthread_mutex_t *fork_mutex, \
+pthread_mutex_t *printf_mutex, t_philo_info *philo_info);
+int				take_a_left_fork(t_data *data, pthread_mutex_t *fork_mutex, \
+pthread_mutex_t *printf_mutex, t_philo_info *philo_info);
 #endif
